@@ -5,48 +5,33 @@
 <title>Japones App</title>
 
 <style>
-body {
-    font-family: Arial;
-    text-align: center;
-    background: #f2f2f2;
-}
-
+body { font-family: Arial; text-align: center; background: #f2f2f2; }
 .card {
     background: white;
     padding: 20px;
-    margin: 30px auto;
-    width: 320px;
+    margin: 20px auto;
+    width: 340px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-
-.word {
-    font-size: 35px;
-}
-
-.hidden {
-    display: none;
-}
-
-button {
-    margin: 5px;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.menu button {
-    margin: 10px;
-}
+.word { font-size: 32px; }
+.hidden { display: none; }
+button { margin: 5px; padding: 10px; }
+.menu button { margin: 5px; }
 </style>
 </head>
 
 <body>
 
-<h2>Aprender Japonés</h2>
+<h2>App Japonés</h2>
 
 <div class="menu">
-    <button onclick="cambiarModo('kanji')">Kanji</button>
-    <button onclick="cambiarModo('verbos')">Verbos</button>
+    <button onclick="setModo('kanji')">Kanji</button>
+    <button onclick="setModo('verbos')">Verbos</button>
+    <button onclick="setModo('adj_i')">Adj-i</button>
+    <button onclick="setModo('adj_na')">Adj-na</button>
+    <button onclick="setModo('gram_dic')">Diccionario</button>
+    <button onclick="setModo('gram_te')">Forma て</button>
+    <button onclick="setModo('gram_nai')">Forma ない</button>
 </div>
 
 <div class="card">
@@ -55,74 +40,164 @@ button {
     <div id="info" class="hidden">
         <p id="reading"></p>
         <p id="meaning"></p>
+        <p id="extra"></p>
     </div>
 
     <button onclick="mostrar()">Mostrar</button><br>
-
-    <button onclick="respuesta()">✅ Lo sé</button>
-    <button onclick="respuesta()">❌ No lo sé</button>
+    <button onclick="next()">✅</button>
+    <button onclick="next()">❌</button>
 </div>
 
 <script>
+
+// ================= KANJI =================
 const kanji = [
-{word:"日本",reading:"にほん",meaning:"Japón"},
-{word:"毎日",reading:"まいにち",meaning:"Todos los días"},
-{word:"学生",reading:"がくせい",meaning:"Estudiante"},
-{word:"先生",reading:"せんせい",meaning:"Profesor"},
-{word:"時間",reading:"じかん",meaning:"Tiempo"},
-{word:"今日",reading:"きょう",meaning:"Hoy"},
-{word:"明日",reading:"あした",meaning:"Mañana"},
-{word:"友達",reading:"ともだち",meaning:"Amigo"},
-{word:"会社",reading:"かいしゃ",meaning:"Empresa"},
-{word:"電車",reading:"でんしゃ",meaning:"Tren"}
+{w:"日本",r:"にほん",m:"Japón"},
+{w:"毎日",r:"まいにち",m:"Todos los días"},
+{w:"学生",r:"がくせい",m:"Estudiante"},
+{w:"先生",r:"せんせい",m:"Profesor"},
+{w:"時間",r:"じかん",m:"Tiempo"},
+{w:"今日",r:"きょう",m:"Hoy"},
+{w:"明日",r:"あした",m:"Mañana"},
+{w:"友達",r:"ともだち",m:"Amigo"},
+{w:"会社",r:"かいしゃ",m:"Empresa"},
+{w:"電車",r:"でんしゃ",m:"Tren"},
+
+{w:"山",r:"やま",m:"Montaña"},
+{w:"川",r:"かわ",m:"Río"},
+{w:"人",r:"ひと",m:"Persona"},
+{w:"水",r:"みず",m:"Agua"},
+{w:"火",r:"ひ",m:"Fuego"},
+{w:"木",r:"き",m:"Árbol"},
+{w:"金",r:"かね",m:"Dinero"},
+{w:"土",r:"つち",m:"Tierra"},
+{w:"空",r:"そら",m:"Cielo"},
+{w:"雨",r:"あめ",m:"Lluvia"},
+
+{w:"駅",r:"えき",m:"Estación"},
+{w:"店",r:"みせ",m:"Tienda"},
+{w:"本",r:"ほん",m:"Libro"},
+{w:"車",r:"くるま",m:"Auto"},
+{w:"道",r:"みち",m:"Camino"},
+{w:"家",r:"いえ",m:"Casa"},
+{w:"国",r:"くに",m:"País"},
+{w:"話",r:"はなし",m:"Historia"},
+{w:"食",r:"しょく",m:"Comida"},
+{w:"飲",r:"いん",m:"Beber"}
 ];
 
+// ================= VERBOS =================
 const verbos = [
-{word:"食べる",reading:"たべる",meaning:"Comer"},
-{word:"飲む",reading:"のむ",meaning:"Beber"},
-{word:"行く",reading:"いく",meaning:"Ir"},
-{word:"来る",reading:"くる",meaning:"Venir"},
-{word:"見る",reading:"みる",meaning:"Ver"},
-{word:"聞く",reading:"きく",meaning:"Escuchar"},
-{word:"話す",reading:"はなす",meaning:"Hablar"},
-{word:"読む",reading:"よむ",meaning:"Leer"},
-{word:"書く",reading:"かく",meaning:"Escribir"},
-{word:"寝る",reading:"ねる",meaning:"Dormir"}
+{w:"食べる",r:"たべる",m:"Comer"},
+{w:"飲む",r:"のむ",m:"Beber"},
+{w:"行く",r:"いく",m:"Ir"},
+{w:"来る",r:"くる",m:"Venir"},
+{w:"見る",r:"みる",m:"Ver"},
+{w:"聞く",r:"きく",m:"Escuchar"},
+{w:"話す",r:"はなす",m:"Hablar"},
+{w:"読む",r:"よむ",m:"Leer"},
+{w:"書く",r:"かく",m:"Escribir"},
+{w:"寝る",r:"ねる",m:"Dormir"},
+
+{w:"起きる",r:"おきる",m:"Levantarse"},
+{w:"買う",r:"かう",m:"Comprar"},
+{w:"売る",r:"うる",m:"Vender"},
+{w:"待つ",r:"まつ",m:"Esperar"},
+{w:"持つ",r:"もつ",m:"Tener"},
+{w:"使う",r:"つかう",m:"Usar"},
+{w:"作る",r:"つくる",m:"Crear"},
+{w:"遊ぶ",r:"あそぶ",m:"Jugar"},
+{w:"泳ぐ",r:"およぐ",m:"Nadar"},
+{w:"歩く",r:"あるく",m:"Caminar"},
+
+{w:"走る",r:"はしる",m:"Correr"},
+{w:"入る",r:"はいる",m:"Entrar"},
+{w:"出る",r:"でる",m:"Salir"},
+{w:"会う",r:"あう",m:"Encontrarse"},
+{w:"開く",r:"あく",m:"Abrir"},
+{w:"閉める",r:"しめる",m:"Cerrar"},
+{w:"教える",r:"おしえる",m:"Enseñar"},
+{w:"習う",r:"ならう",m:"Aprender"},
+{w:"考える",r:"かんがえる",m:"Pensar"},
+{w:"分かる",r:"わかる",m:"Entender"}
 ];
 
+// ================= ADJETIVOS =================
+const adj_i = [
+{w:"大きい",r:"おおきい",m:"Grande"},
+{w:"小さい",r:"ちいさい",m:"Pequeño"},
+{w:"新しい",r:"あたらしい",m:"Nuevo"},
+{w:"古い",r:"ふるい",m:"Viejo"},
+{w:"高い",r:"たかい",m:"Caro/Alto"},
+{w:"安い",r:"やすい",m:"Barato"},
+{w:"暑い",r:"あつい",m:"Calor"},
+{w:"寒い",r:"さむい",m:"Frío"},
+{w:"早い",r:"はやい",m:"Temprano"},
+{w:"遅い",r:"おそい",m:"Tarde"}
+];
+
+const adj_na = [
+{w:"静か",r:"しずか",m:"Tranquilo"},
+{w:"便利",r:"べんり",m:"Conveniente"},
+{w:"好き",r:"すき",m:"Gustar"},
+{w:"嫌い",r:"きらい",m:"No gustar"},
+{w:"有名",r:"ゆうめい",m:"Famoso"},
+{w:"元気",r:"げんき",m:"Energético"},
+{w:"簡単",r:"かんたん",m:"Fácil"},
+{w:"大変",r:"たいへん",m:"Difícil"},
+{w:"暇",r:"ひま",m:"Libre"},
+{w:"安全",r:"あんぜん",m:"Seguro"}
+];
+
+// ================= GRAMATICA =================
+const gram_dic = [
+{w:"食べます → ?",r:"たべる",m:"Forma diccionario",e:"Grupo 2: quitar ます"},
+{w:"飲みます → ?",r:"のむ",m:"Forma diccionario",e:"Grupo 1 cambia terminación"}
+];
+
+const gram_te = [
+{w:"食べる → ?",r:"たべて",m:"Forma て",e:"Grupo 2: reemplazar る→て"},
+{w:"飲む → ?",r:"のんで",m:"Forma て",e:"む→んで"}
+];
+
+const gram_nai = [
+{w:"食べる → ?",r:"たべない",m:"Forma negativa",e:"Grupo 2: る→ない"},
+{w:"飲む → ?",r:"のまない",m:"Forma negativa",e:"む→まない"}
+];
+
+// ================= LOGICA =================
 let modo = "kanji";
-let actual = 0;
 
-function cambiarModo(nuevo) {
-    modo = nuevo;
-    siguiente();
+function getLista(){
+    return {
+        kanji, verbos, adj_i, adj_na,
+        gram_dic, gram_te, gram_nai
+    }[modo];
 }
 
-function listaActual() {
-    return modo === "kanji" ? kanji : verbos;
+function setModo(m){
+    modo = m;
+    next();
 }
 
-function siguiente() {
-    const lista = listaActual();
-    actual = Math.floor(Math.random() * lista.length);
-    const p = lista[actual];
+function next(){
+    const lista = getLista();
+    const p = lista[Math.floor(Math.random()*lista.length)];
 
-    document.getElementById("word").innerText = p.word;
-    document.getElementById("reading").innerText = p.reading;
-    document.getElementById("meaning").innerText = p.meaning;
+    document.getElementById("word").innerText = p.w;
+    document.getElementById("reading").innerText = p.r;
+    document.getElementById("meaning").innerText = p.m;
+    document.getElementById("extra").innerText = p.e || "";
 
     document.getElementById("info").classList.add("hidden");
 }
 
-function mostrar() {
+function mostrar(){
     document.getElementById("info").classList.remove("hidden");
 }
 
-function respuesta() {
-    siguiente();
-}
+next();
 
-siguiente();
 </script>
 
 </body>
