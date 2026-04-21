@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Japones App</title>
+
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    background: #f2f2f2;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    margin: 30px auto;
+    width: 320px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.word {
+    font-size: 35px;
+}
+
+.hidden {
+    display: none;
+}
+
+button {
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.menu button {
+    margin: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Aprender Japonés</h2>
+
+<div class="menu">
+    <button onclick="cambiarModo('kanji')">Kanji</button>
+    <button onclick="cambiarModo('verbos')">Verbos</button>
+</div>
+
+<div class="card">
+    <div class="word" id="word"></div>
+
+    <div id="info" class="hidden">
+        <p id="reading"></p>
+        <p id="meaning"></p>
+    </div>
+
+    <button onclick="mostrar()">Mostrar</button><br>
+
+    <button onclick="respuesta()">✅ Lo sé</button>
+    <button onclick="respuesta()">❌ No lo sé</button>
+</div>
+
+<script>
+const kanji = [
+{word:"日本",reading:"にほん",meaning:"Japón"},
+{word:"毎日",reading:"まいにち",meaning:"Todos los días"},
+{word:"学生",reading:"がくせい",meaning:"Estudiante"},
+{word:"先生",reading:"せんせい",meaning:"Profesor"},
+{word:"時間",reading:"じかん",meaning:"Tiempo"},
+{word:"今日",reading:"きょう",meaning:"Hoy"},
+{word:"明日",reading:"あした",meaning:"Mañana"},
+{word:"友達",reading:"ともだち",meaning:"Amigo"},
+{word:"会社",reading:"かいしゃ",meaning:"Empresa"},
+{word:"電車",reading:"でんしゃ",meaning:"Tren"}
+];
+
+const verbos = [
+{word:"食べる",reading:"たべる",meaning:"Comer"},
+{word:"飲む",reading:"のむ",meaning:"Beber"},
+{word:"行く",reading:"いく",meaning:"Ir"},
+{word:"来る",reading:"くる",meaning:"Venir"},
+{word:"見る",reading:"みる",meaning:"Ver"},
+{word:"聞く",reading:"きく",meaning:"Escuchar"},
+{word:"話す",reading:"はなす",meaning:"Hablar"},
+{word:"読む",reading:"よむ",meaning:"Leer"},
+{word:"書く",reading:"かく",meaning:"Escribir"},
+{word:"寝る",reading:"ねる",meaning:"Dormir"}
+];
+
+let modo = "kanji";
+let actual = 0;
+
+function cambiarModo(nuevo) {
+    modo = nuevo;
+    siguiente();
+}
+
+function listaActual() {
+    return modo === "kanji" ? kanji : verbos;
+}
+
+function siguiente() {
+    const lista = listaActual();
+    actual = Math.floor(Math.random() * lista.length);
+    const p = lista[actual];
+
+    document.getElementById("word").innerText = p.word;
+    document.getElementById("reading").innerText = p.reading;
+    document.getElementById("meaning").innerText = p.meaning;
+
+    document.getElementById("info").classList.add("hidden");
+}
+
+function mostrar() {
+    document.getElementById("info").classList.remove("hidden");
+}
+
+function respuesta() {
+    siguiente();
+}
+
+siguiente();
+</script>
+
+</body>
+</html>
